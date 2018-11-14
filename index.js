@@ -6,7 +6,7 @@ const Alexa = require('alexa-sdk');
 const APP_ID = undefined;
 
 const SKILL_NAME = '';
-const GET_FACT_MESSAGE = "Here's your fact: ";
+const GET_FACT_MESSAGE = 'Here\'s your fact: ';
 const HELP_MESSAGE = '';
 const HELP_REPROMPT = 'What can I help you with?';
 const STOP_MESSAGE = 'Goodbye!';
@@ -21,7 +21,7 @@ const data = [
 
 const handlers = {
     'LaunchRequest': function () {
-      }
+
     },
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
@@ -48,6 +48,7 @@ const handlers = {
 exports.handler = function (event, context, callback) {
     const alexa = Alexa.handler(event, context, callback);
     alexa.APP_ID = APP_ID;
+    alexa.dynamoDBTableName = '';
     alexa.registerHandlers(handlers);
     alexa.execute();
 };

@@ -1,10 +1,6 @@
 'use strict';
 const Alexa = require('alexa-sdk');
 
-//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
-//Make sure to enclose your value in quotes, like this: const APP_ID = 'amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1';
-const APP_ID = undefined;
-
 const SKILL_NAME = '';
 const GET_FACT_MESSAGE = 'Here\'s your fact: ';
 const HELP_MESSAGE = '';
@@ -12,15 +8,52 @@ const HELP_REPROMPT = 'What can I help you with?';
 const STOP_MESSAGE = 'Goodbye!';
 
 //=========================================================================================================================================
-const data = [
-    '',
-    ''
-];
+/*const northFacts = {
+  {
+    question: 'What character did Nolan North voice in the Uncharted series?',
+    answer: 'Desmond Miles'
+  },
+  {
+    question: 'What character did Nolan North voice in the Batman: Arkham series?',
+    answer: 'The Penguin'
+  },
+  {
+    question: 'What character did Nolan North voice in Star Trek Into Darkness?',
+    answer: 'A Helmsman on the USS Vengeance'
+  },
+  {
+    question: 'What character did Nolan North voice in ',
+    answer: ''
+  },
+  {
+    question: 'What character did Nolan North voice in ',
+    answer: ''
+  },
 
-//=========================================================================================================================================
+}
 
+
+const nolanNorthData = {
+  'birthday': 'October 31st, 1970',
+  'full name': 'Nolan Ramsey North',
+  'married': true,
+  'children': 2,
+  'cityBorn': 'New Haven, Connecticut'
+}
+*/
+////////////////////////////////////////////////////////////
 const handlers = {
     'LaunchRequest': function () {
+      if(Object.keys(this.attributes).length === 0){
+        this.attributes.northFacts = {
+          'northPoints': 0,
+        };
+        this.response.speak('Welcome to NorthFacts, where you can learn about Nolan North, and rack up northPoints!');
+      }
+      else{
+        this.response.speak('Welcome back to NorthFacts! Your score is ' + this.attributes.northFacts.northPoints'.');
+      }
+      this.emit(':responseReady');
 
     },
     'AMAZON.HelpIntent': function () {
@@ -45,10 +78,10 @@ const handlers = {
 }
 };
 
+
 exports.handler = function (event, context, callback) {
     const alexa = Alexa.handler(event, context, callback);
-    alexa.APP_ID = APP_ID;
-    alexa.dynamoDBTableName = '';
+    alexa.dynamoDBTableName = 'nolanNorthFactsDB';
     alexa.registerHandlers(handlers);
     alexa.execute();
 };

@@ -8,39 +8,42 @@ const HELP_REPROMPT = 'What can I help you with?';
 const STOP_MESSAGE = 'Goodbye!';
 
 //=========================================================================================================================================
-/*const northFacts = {
+const northFacts = [
   {
-    question: 'What character did Nolan North voice in the Uncharted series?',
-    answer: 'Desmond Miles'
+    fact: 'Nolan North voiced Desmond Miles in the Uncharted series.'
   },
   {
-    question: 'What character did Nolan North voice in the Batman: Arkham series?',
-    answer: 'The Penguin'
+    fact: 'Nolan North  was born on Oct 31st 1970.'
   },
   {
-    question: 'What character did Nolan North voice in Star Trek Into Darkness?',
-    answer: 'A Helmsman on the USS Vengeance'
+    fact: 'Nolan North  was born in New Haven, Connecticut.'
   },
   {
-    question: 'What character did Nolan North voice in ',
-    answer: ''
+    fact: 'Nolan North Fact#4.'
   },
   {
-    question: 'What character did Nolan North voice in ',
-    answer: ''
+    fact: 'Nolan North Fact#5.'
   },
+  {
+    fact: 'Nolan North Fact#6.'
+  },
+  {
+    fact: 'Nolan North Fact#7.'
+  }
+];
 
-}
+//const numberOfFacts = northFacts.length % this.attributes.northFacts.northPoints;
 
-
-const nolanNorthData = {
+/*
+const nolanNorthBio = {
   'birthday': 'October 31st, 1970',
   'full name': 'Nolan Ramsey North',
   'married': true,
   'children': 2,
   'cityBorn': 'New Haven, Connecticut'
-}
+};
 */
+
 ////////////////////////////////////////////////////////////
 const handlers = {
     'LaunchRequest': function () {
@@ -48,13 +51,24 @@ const handlers = {
         this.attributes.northFacts = {
           'northPoints': 0,
         };
-        this.response.speak('Welcome to NorthFacts, where you can learn about Nolan North, and rack up northPoints!');
+        this.response.speak(`Welcome to NorthFacts, where you can learn about Nolan North, and rack up northPoints! Let's start you with your first fact. ${FactRequest(this.attributes)} Would you like another fact?`).listen('Would you like another fact?');
       }
       else{
-        this.response.speak('Welcome back to NorthFacts! Your score is ' + this.attributes.northFacts.northPoints'.');
+        this.response.speak(`Welcome back to NorthFacts! You have ${this.attributes.northFacts.northPoints} northPoints. Time for the next fact! ${FactRequest(this.attributes)} Would you like another fact?`).listen('Would you like another fact?');
       }
+      this.attributes.northFacts.northPoints++;
       this.emit(':responseReady');
 
+    },
+    'MoreFacts': function (){
+      this.response.speak(`${FactRequest(this.attributes)} Would you like another fact?`).listen('Would you like another fact?');
+      this.attributes.northFacts.northPoints++;
+      this.emit(':responseReady');
+    },
+    'CheckScore': function (){
+      this.response.speak(`You have ${this.attributes.northFacts.northPoints} northPoints. Would you like to increase your score?`).listen('Would you like to increase your score?');
+      this.attributes.northFacts.northPoints++;
+      this.emit(':responseReady');
     },
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
@@ -76,6 +90,13 @@ const handlers = {
         console.log('session ended!');
         this.emit(':saveState', true);
 }
+};
+
+const FactRequest = function(attributes){
+  let northPoints = attributes.northFacts.northPoints;
+  let factNumber = northPoints % northFacts.length;
+  let currentFact = northFacts[northPoints].fact;
+  return currentFact;
 };
 
 

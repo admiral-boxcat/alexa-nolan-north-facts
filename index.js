@@ -110,6 +110,7 @@ const handlers = {
 
 // function to handle fact requests
 const FactRequest = function(attributes){
+  // if user has not reached the end of the facts, keep going
   if (attributes.northFacts.factNumber < northCreditsList.length) {
     let factNumber = attributes.northFacts.factNumber;
     let currentGame = northCreditsList[factNumber].mediaName;
@@ -119,6 +120,7 @@ const FactRequest = function(attributes){
     return `Nolan North voiced ${currentCredit} in the ${mediaType} ${currentGame}`;
   }
   else {
+    // if user has heard all the facts, start over
     attributes.northFacts.factNumber = 0;
     let factNumber = attributes.northFacts.factNumber;
     let currentGame = northCreditsList[factNumber].mediaName;
